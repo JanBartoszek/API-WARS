@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# my files
+/home/janex/js/API-WARS/database.sh
