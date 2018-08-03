@@ -22,8 +22,8 @@ var planetsDOM = {
             +'<th scope="col">Climate</th>'
             +'<th scope="col">Terrain</th>'
             +'<th scope="col">Surface water percentage</th>'
-            +'<th scope="col">Pupulation</th>'
-            // +'<th scope="col">#</th>'
+            +'<th scope="col">Population</th>'
+            +'<th scope="col">Residents</th>'
         +' </tr>'
 
         let planetsContainer = document.createElement('tbody');
@@ -97,11 +97,71 @@ var planetsDOM = {
             document.getElementById('population'+i).innerHTML = population;
 
 
-            // let residents = array[i].residents;
-            // let residentsDiv = document.createElement('div');
-            // residentsDiv.setAttribute('class', 'cell');
-            // residentsDiv.setAttribute('id', 'residents'+i);
-            // document.getElementById('row'+i).appendChild(residentsDiv);
+            let residents = array[i].residents;
+            let residentsDiv = document.createElement('div');
+            residentsDiv.setAttribute('class', 'cell');
+            residentsDiv.setAttribute('id', 'residents'+i);
+            document.getElementById('row'+i).appendChild(residentsDiv);
+            if (residents.length == 0){
+                document.getElementById('residents'+i).innerHTML = 'No known residents';
+            } else { document.getElementById('residents'+i).innerHTML = 
+                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal'+i+'">'
+                    +residents.length + ' resident(s)'
+                +'</button>'
+            }
+            
+            let modal = document.createElement('div');
+            modal.setAttribute('class', 'modal fade');
+            modal.setAttribute('id', "myModal"+i);
+            document.body.appendChild(modal);
+            document.getElementById("myModal"+i).innerHTML = 
+            // +'<div class="modal fade" id="myModal'+i+'">'
+                    '<div class="modal-dialog">'
+                        +'<div class="modal-content">'
+                            +'<div class="modal-header">'
+                                +'<h4 class="modal-title">' + planetName + ' residents</h4>'
+                                +'<button type="button" class="close" data-dismiss="modal">&times;</button>'
+                            +'</div>'                         
+                            +'<div class="modal-body">'
+                                +'<table>'
+                                    +'<thead>'
+                                        +'<tr>'
+                                            +'<th scope="col">Name</th>'
+                                            +'<th scope="col">Height</th>'
+                                            +'<th scope="col">Mass</th>'
+                                            +'<th scope="col">Skin</th>'
+                                            +'<th scope="col">Hair</th>'
+                                            +'<th scope="col">Eyes</th>'
+                                            +'<th scope="col">Birth</th>'
+                                            +'<th scope="col">Gender</th>'
+                                        +' </tr>'
+                                    +'</thead>'
+                                    +'<tbody>'
+                                        +'<tr>'
+                                            +'<td>'+ +'</td>'
+                                            +'<td>'+ +'</td>'
+                                            +'<td>'+ +'</td>'
+                                            +'<td>'+ +'</td>'
+                                            +'<td>'+ +'</td>'
+                                            +'<td>'+ +'</td>'
+                                            +'<td>'+ +'</td>'
+                                            +'<td>'+ +'</td>'
+                                            
+
+                                        +'</tr>'
+
+                                    +'</tbody>'
+
+                                +'</table>'
+                                
+                            +'</div>'
+                            +'<div class="modal-footer">'
+                                +'<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>'
+                            +'</div>'
+                        +'</div>'
+                    +'</div>'
+                // +'</div>'
+            ;
             // document.getElementById('residents'+i).innerHTML = residents;
 
             // array[i].forEach(function(cell)

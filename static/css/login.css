@@ -167,4 +167,10 @@ table{
 
 }
 
+.modal-open .modal-backdrop { 
+    z-index: 0; 
+}
 
+.modal-open {
+    overflow: auto;
+}
