@@ -24,8 +24,6 @@ def register_new_user():
 @app.route("/login", methods = ['GET', 'POST'])
 def log_in_user():
     login_input = request.get_json()
-    print(login_input)
-    print(logic.check_if_user_in_database(login_input))
     if logic.check_if_user_in_database(login_input) and logic.check_if_user_password_correct(login_input):
         username = login_input['username']
         session['user:' + username] = username

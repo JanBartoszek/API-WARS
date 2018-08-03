@@ -1,3 +1,5 @@
+    // based on https://bootsnipp.com/snippets/ypp84
+
 var loginDOM = {
 
     createLoginElements : function(){
@@ -5,9 +7,9 @@ var loginDOM = {
         loginContainer.setAttribute('class', 'fluid-container')
         loginContainer.setAttribute('id', 'login-container');
         document.body.appendChild(loginContainer);
-        document.getElementById('login-container').innerHTML = 
-        +'<div class="col-md-12">'
-            +'<div class="wrap">'
+        document.getElementById('login-container').innerHTML = '<div class="col-md-12">'
+        +'<div class="wrap">'
+            +'<div class="three-upper-p">'
                 +'<p class="form-title" id="sign-in-loginDOM">'
                     +'Sign In'
                 +'</p>'
@@ -17,14 +19,14 @@ var loginDOM = {
                 +'<p class="form-title" id="register-loginDOM" onclick = "loginEvents.loadRegisterDOM()">'
                     +'Register'
                 +'</p>'
-                +'<div class="login-register">'
-                    +'<input type="text" placeholder="Username" id="username" />'
-                    +'<input type="password" placeholder="Password" id="password" />'
-                    + '<button onclick = "sendData.sendLoginInput()" class="btn btn-success btn-sm" >Submit</button>'
-                +'</div>'
+            +'</div>'
+            +'<div class="login-register">'
+                +'<input type="text" placeholder="Username" id="username" />'
+                +'<input type="password" placeholder="Password" id="password" />'
+                + '<button onclick = "sendData.sendLoginInput()" class="btn btn-success btn-sm" >Submit</button>'
             +'</div>'
         +'</div>'
-//based on https://bootsnipp.com/snippets/ypp84
+    +'</div>';
     },
 
     removeLoginDOM: function(){
@@ -44,6 +46,11 @@ var loginEvents = {
     loadRegisterDOM: function(){
         loginDOM.removeLoginDOM();
         registerDOM.createRegisterElements();
+    },
+
+    loadPlanetsDOM: function(){
+        loginDOM.removeLoginDOM();
+        planetsDOM.createPlanetsElements();
     }
     
 }
