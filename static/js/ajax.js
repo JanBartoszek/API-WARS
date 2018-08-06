@@ -18,7 +18,7 @@ var sendData = {
         let convertedLoginInput = logic.convertToJSON(loginInput);
         let result = this.sendToServer(endpoint, convertedLoginInput).then(function(data) {
             loginEvents.loadPlanetsDOM();
-            getData.getPlanets();
+            getData.getPlanets(planetsData.initialPlanetsEndpoint);
         }).catch(function(err) {
             alert('Something went wrong. Please try again.');
         });
@@ -48,13 +48,24 @@ var sendData = {
 
 var getData = {
 
+    changePlanetsPage: function(endpoint){
+        if (endpoint != null){
+            planetsDOM.removePlanetsAndModals();
+            planetsDOM.createPlanetsElements();
+            getData.getPlanets(endpoint)
+        }
+    },
 
-    getPlanets: function(){
-        let endpoint = 'https://swapi.co/api/planets/';
+
+    getPlanets: function(endpoint){
+        // let endpoint = 'https://swapi.co/api/planets/';
         planetsDOM.createAwaitingGif();
         let planets = this.getData(endpoint).then(function(data) {
-            planetsDOM.removeAwaitingGif();
+            planetsData.nextPlanetsEndpoint = data.next;
+            planetsData.previousPlanetsEndpoint = data.previous;
+            // console.log(planetsData)
             console.log(data);
+            planetsDOM.removeAwaitingGif();
             planetsDOM.createDivsWithImages(data.results);
         })
 

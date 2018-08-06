@@ -50,7 +50,8 @@ var loginEvents = {
 
     loadPlanetsDOM: function(){
         loginDOM.removeLoginDOM();
-        planetsDOM.createPlanetsElements();
+        planetsDOM.createNavbar(planetsDOM.createPlanetsElements);
+        // planetsDOM.createPlanetsElements();
     }
     
 }

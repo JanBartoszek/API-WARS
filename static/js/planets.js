@@ -1,6 +1,6 @@
 var planetsDOM = {
 
-    createPlanetsElements : function(){
+    createNavbar : function(callback){
         let navbar = document.createElement('nav');
         navbar.setAttribute('class', 'navbar navbar-expand-sm bg-dark navbar-dark sticky-top')
         navbar.setAttribute('id', 'navbar')
@@ -11,8 +11,8 @@ var planetsDOM = {
                     +'<a class="navbar-brand">API WARS</a>'
                 +'</div>'
                 +'<div id="navbar-buttons">'
-                    +'<button type="button" class="btn btn-secondary navbar-btn">Previous</button>'
-                    +'<button type="button" class="btn btn-secondary navbar-btn">Next</button>'
+                    +'<button type="button" onclick=getData.changePlanetsPage(planetsData.previousPlanetsEndpoint) class="btn btn-secondary navbar-btn">Previous</button>'
+                    +'<button type="button" onclick=getData.changePlanetsPage(planetsData.nextPlanetsEndpoint) class="btn btn-secondary navbar-btn">Next</button>'
                 +'</div>'
                 +'<ul class="nav navbar-nav">'
                     +'<li class="nav-item">'
@@ -25,11 +25,13 @@ var planetsDOM = {
                         +'<a class="nav-link" >Link 1</a>'
                     +'</li>'
                 +'</ul>'
-      
             +'</div>'
+        callback();
+        //inaczej navbar zostawial kawalek na dole XD
+    },
 
 
-
+    createPlanetsElements : function(){
         let tableContainer = document.createElement('div');
         tableContainer.setAttribute('class', 'table table-striped col-md-12 ')
         tableContainer.setAttribute('id', 'table-container');
@@ -209,6 +211,13 @@ var planetsDOM = {
             +'<td>'+ resident.gender+'</td>'                                    
     },
 
+    removePlanetsAndModals : function(){
+        let tableContainer = document.getElementById('table-container');
+        let modalContainer = document.getElementById('modalContainer');
+        tableContainer.parentNode.removeChild(tableContainer);
+        modalContainer.parentElement.removeChild(modalContainer);
+    },
+
     createAwaitingGif : function(){
         let awaitingGifContainer = document.createElement('img');
         awaitingGifContainer.setAttribute('id', 'awaiting-gif-container');
@@ -224,5 +233,8 @@ var planetsDOM = {
 
 
 var planetsData = {
-    residents : []
+    residents : [],
+    initialPlanetsEndpoint : 'https://swapi.co/api/planets/',
+    nextPlanetsEndpoint : '',
+    previousPlanetsEndpoint: ''
 };
