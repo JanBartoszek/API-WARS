@@ -37,7 +37,6 @@ var sendData = {
                 if (response){
                     resolve(response);
                 } else {
-                    // alert('Something wrong');
                     reject(response);
                 }
             }
@@ -59,6 +58,19 @@ var getData = {
             planetsDOM.createDivsWithImages(data.results);
         })
 
+    },
+
+    getResidents: function(indexNumber){
+        let listOfEndpoint = planetsData.residents[indexNumber]
+        let tableBody = document.getElementById("myModal"+indexNumber).getElementsByClassName('tbody')[0]
+
+        if (tableBody.hasChildNodes() == false){
+        listOfEndpoint.forEach(function(endpoint) {
+            getData.getData(endpoint).then(function(data) {
+                    planetsDOM.fillUpResidentsTable(indexNumber, data)
+            })        
+        })
+        };
     },
 
 

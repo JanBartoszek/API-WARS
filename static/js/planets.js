@@ -1,15 +1,46 @@
 var planetsDOM = {
 
     createPlanetsElements : function(){
+        let navbar = document.createElement('nav');
+        navbar.setAttribute('class', 'navbar navbar-expand-sm bg-dark navbar-dark sticky-top')
+        navbar.setAttribute('id', 'navbar')
+        document.body.appendChild(navbar);
+        document.getElementById('navbar').innerHTML = 
+            '<div class="container-fluid">'
+                +'<div class="navbar-header">'
+                    +'<a class="navbar-brand">API WARS</a>'
+                +'</div>'
+                +'<div id="navbar-buttons">'
+                    +'<button type="button" class="btn btn-secondary navbar-btn">Previous</button>'
+                    +'<button type="button" class="btn btn-secondary navbar-btn">Next</button>'
+                +'</div>'
+                +'<ul class="nav navbar-nav">'
+                    +'<li class="nav-item">'
+                        +'<a class="nav-link" >Link 1</a>'
+                    +'</li>'
+                    +'<li class="nav-item">'
+                        +'<a class="nav-link" >Link 1</a>'
+                    +'</li>'
+                    +'<li class="nav-item">'
+                        +'<a class="nav-link" >Link 1</a>'
+                    +'</li>'
+                +'</ul>'
+      
+            +'</div>'
+
+
+
         let tableContainer = document.createElement('div');
         tableContainer.setAttribute('class', 'table table-striped col-md-12 ')
         tableContainer.setAttribute('id', 'table-container');
         document.body.appendChild(tableContainer);
 
+
         let planetTable = document.createElement('table');
         planetTable.setAttribute('class', "table table-striped")
         planetTable.setAttribute('id', 'planet-table');
         document.getElementById('table-container').appendChild(planetTable);
+
 
         let tableHead = document.createElement('thead');
         tableHead.setAttribute('class', 'thead-dark');
@@ -26,20 +57,19 @@ var planetsDOM = {
             +'<th scope="col">Residents</th>'
         +' </tr>'
 
+
         let planetsContainer = document.createElement('tbody');
-        // planetsContainer.setAttribute('class', 'table table-striped')
         planetsContainer.setAttribute('id', 'planets-container');
-        // document.body.appendChild(planetsContainer);
         document.getElementById('planet-table').appendChild(planetsContainer);
 
+
+        let modalContainer = document.createElement('div');
+        modalContainer.setAttribute('id', 'modalContainer');
+        document.body.appendChild(modalContainer);
 
 
     },
 
-    // createTableHeaders: function(){
-    //     let tableHeaders = document.createElement('div');
-    //     let tableHeaders = document.createElement('div');
-    // }
 
     createDivsWithImages: function (array){
         let i;
@@ -86,7 +116,12 @@ var planetsDOM = {
             surfaceWaterPercentageCell.setAttribute('class', 'cell');
             surfaceWaterPercentageCell.setAttribute('id', 'surfaceWaterPercentage'+i);
             document.getElementById('row'+i).appendChild(surfaceWaterPercentageCell);
-            document.getElementById('surfaceWaterPercentage'+i).innerHTML = surfaceWaterPercentage;
+            if (surfaceWaterPercentage != 'unknown'){
+            document.getElementById('surfaceWaterPercentage'+i).innerHTML = surfaceWaterPercentage + '%';
+            } else {
+                document.getElementById('surfaceWaterPercentage'+i).innerHTML = surfaceWaterPercentage;
+
+            }
 
 
             let population = array[i].population;
@@ -94,37 +129,45 @@ var planetsDOM = {
             populationCell.setAttribute('class', 'cell');
             populationCell.setAttribute('id', 'population'+i);
             document.getElementById('row'+i).appendChild(populationCell);
+            if (population != 'unknown'){
+                document.getElementById('population'+i).innerHTML = population/1000 + ' thousand people';
+            } else {
             document.getElementById('population'+i).innerHTML = population;
+            }
 
 
             let residents = array[i].residents;
-            let residentsDiv = document.createElement('div');
-            residentsDiv.setAttribute('class', 'cell');
-            residentsDiv.setAttribute('id', 'residents'+i);
-            document.getElementById('row'+i).appendChild(residentsDiv);
+            planetsData.residents.push(residents);
+
+
+            let residentsTd = document.createElement('td');
+            residentsTd.setAttribute('class', 'cell');
+            residentsTd.setAttribute('id', 'residents'+i);
+            document.getElementById('row'+i).appendChild(residentsTd);
             if (residents.length == 0){
                 document.getElementById('residents'+i).innerHTML = 'No known residents';
             } else { document.getElementById('residents'+i).innerHTML = 
-                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal'+i+'">'
+                '<button type="button" class="btn btn-danger" id="modalButton'+i+'" onclick=getData.getResidents('+i+')  data-toggle="modal" data-target="#myModal'+i+'">'
                     +residents.length + ' resident(s)'
                 +'</button>'
             }
             
+
             let modal = document.createElement('div');
             modal.setAttribute('class', 'modal fade');
             modal.setAttribute('id', "myModal"+i);
-            document.body.appendChild(modal);
+            document.getElementById('modalContainer').appendChild(modal);
             document.getElementById("myModal"+i).innerHTML = 
-            // +'<div class="modal fade" id="myModal'+i+'">'
-                    '<div class="modal-dialog">'
+                    '<div class="modal-dialog modal-xl">'
                         +'<div class="modal-content">'
                             +'<div class="modal-header">'
                                 +'<h4 class="modal-title">' + planetName + ' residents</h4>'
                                 +'<button type="button" class="close" data-dismiss="modal">&times;</button>'
                             +'</div>'                         
                             +'<div class="modal-body">'
+                                +'<div class="table table-striped col-md-12">'
                                 +'<table>'
-                                    +'<thead>'
+                                    +'<thead class="thead-dark">'
                                         +'<tr>'
                                             +'<th scope="col">Name</th>'
                                             +'<th scope="col">Height</th>'
@@ -136,47 +179,34 @@ var planetsDOM = {
                                             +'<th scope="col">Gender</th>'
                                         +' </tr>'
                                     +'</thead>'
-                                    +'<tbody>'
-                                        +'<tr>'
-                                            +'<td>'+ +'</td>'
-                                            +'<td>'+ +'</td>'
-                                            +'<td>'+ +'</td>'
-                                            +'<td>'+ +'</td>'
-                                            +'<td>'+ +'</td>'
-                                            +'<td>'+ +'</td>'
-                                            +'<td>'+ +'</td>'
-                                            +'<td>'+ +'</td>'
-                                            
-
-                                        +'</tr>'
+                                    +'<tbody class="tbody">'
 
                                     +'</tbody>'
-
                                 +'</table>'
-                                
+                                +'</div>'
                             +'</div>'
                             +'<div class="modal-footer">'
                                 +'<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>'
                             +'</div>'
                         +'</div>'
                     +'</div>'
-                // +'</div>'
-            ;
-            // document.getElementById('residents'+i).innerHTML = residents;
-
-            // array[i].forEach(function(cell)
-            // {
-            //     var div = document.createElement('div');
-            //     div.setAttribute('class', cell.name);
-            //     // div.setAttribute('id', cell.name);
-            //     // div.setAttribute('onclick', 'memoryGameEvents.revertCard(this)')
-            //     document.getElementById('row'+i).appendChild(div);
-            //     // var img = document.createElement("img");
-            //     // img.src = gameStuff.defaultImage.image;
-            //     // div.appendChild(img);
-            //     }
-            // )
+                +'</div>'
         }
+    },
+
+    fillUpResidentsTable: function(indexNumber, resident){
+        let row = document.createElement('tr');
+        row.setAttribute('class', 'row');
+        document.getElementById("myModal"+indexNumber).getElementsByClassName('tbody')[0].appendChild(row);
+        document.getElementById("myModal"+indexNumber).getElementsByClassName('tbody')[0].lastChild.innerHTML = 
+            '<td>'+ resident.name +'</td>'
+            +'<td>'+ resident.height +'</td>'
+            +'<td>'+ resident.mass +'</td>'
+            +'<td>'+ resident.skin_color+'</td>'
+            +'<td>'+ resident.hair_color +'</td>'
+            +'<td>'+ resident.eye_color +'</td>'
+            +'<td>'+ resident.birth_year +'</td>'
+            +'<td>'+ resident.gender+'</td>'                                    
     },
 
     createAwaitingGif : function(){
@@ -190,7 +220,9 @@ var planetsDOM = {
         let awaitingGifContainer = document.getElementById("awaiting-gif-container");
         awaitingGifContainer.parentNode.removeChild(awaitingGifContainer);
     },
-
 }
 
-var planetsData;
+
+var planetsData = {
+    residents : []
+};
