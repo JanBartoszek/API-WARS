@@ -17,8 +17,49 @@ var sendData = {
         let loginInput = loginDOM.getLoginInput();
         let convertedLoginInput = logic.convertToJSON(loginInput);
         let result = this.sendToServer(endpoint, convertedLoginInput).then(function(data) {
-            loginEvents.loadPlanetsDOM();
+            planetsData.activeUser = data;
+            sendData.getVotedPlanets(planetsData.activeUser)
+            loginEvents.loadPlanetsDOM(data);
             getData.getPlanets(planetsData.initialPlanetsEndpoint);
+        }).catch(function(err) {
+            alert('Something went wrong. Please try again.');
+        });
+    },
+
+
+    logout : function(activeUser){
+        let endpoint = '/logout'
+        let convertedActiveUser = logic.convertToJSON(activeUser);
+        this.sendToServer(endpoint, convertedActiveUser).then(function(data) {
+            planetsDOM.removePlanetsDOM();
+            loginDOM.createLoginElements();
+            planetsData.votedPlanets = []
+            alert('Successful logout');
+        }).catch(function(err) {
+            alert('Something went wrong. Please try again.');
+        });
+    },
+
+
+    sendVote : function(username, planet){
+        let endpoint = '/vote'
+        let dataToSend = logic.convertToJSON({username : username, planet_name : planet})
+        this.sendToServer(endpoint, dataToSend).then(function(data) {
+            planetsDOM.changeVoteAttributes(data);
+            alert('Thank you for your vote');
+            sendData.getVotedPlanets(planetsData.activeUser)
+        }).catch(function(err) {
+            alert('Something went wrong. Please try again.');
+        });
+    },
+
+
+    getVotedPlanets : function(activeUser){
+        let endpoint = '/voted_planets'
+        let convertedActiveUser = logic.convertToJSON(activeUser);
+        this.sendToServer(endpoint, convertedActiveUser).then(function(data) {
+            planetsData.votedPlanets = data;
+            console.log(data)
         }).catch(function(err) {
             alert('Something went wrong. Please try again.');
         });
@@ -48,6 +89,22 @@ var sendData = {
 
 var getData = {
 
+    checkLoggedIn : function(){
+        let endpoint = '/check_logged_in'
+        this.getData(endpoint).then(function(data) {
+            console.log(planetsData)
+            if (data){ 
+                planetsData.activeUser = data;
+                sendData.getVotedPlanets(planetsData.activeUser)
+                planetsDOM.loadPlanetsAll(data)
+                getData.getPlanets(planetsData.initialPlanetsEndpoint);
+            } else {            
+                loginDOM.createLoginElements();
+            }
+        })
+    },
+
+
     changePlanetsPage: function(endpoint){
         if (endpoint != null){
             planetsDOM.removePlanetsAndModals();
@@ -61,6 +118,7 @@ var getData = {
         // let endpoint = 'https://swapi.co/api/planets/';
         planetsDOM.createAwaitingGif();
         let planets = this.getData(endpoint).then(function(data) {
+
             planetsData.nextPlanetsEndpoint = data.next;
             planetsData.previousPlanetsEndpoint = data.previous;
             // console.log(planetsData)
@@ -70,6 +128,7 @@ var getData = {
         })
 
     },
+
 
     getResidents: function(indexNumber){
         let listOfEndpoint = planetsData.residents[indexNumber]
@@ -97,5 +156,5 @@ var getData = {
             xhttp.open("GET", endpoint, true);
             xhttp.send();
         })
-    }
+    },
 }

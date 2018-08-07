@@ -1,1 +1,2 @@
-loginDOM.createLoginElements();
+getData.checkLoggedIn()
+

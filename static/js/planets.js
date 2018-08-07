@@ -1,6 +1,6 @@
 var planetsDOM = {
 
-    createNavbar : function(callback){
+    createNavbar : function(activeUser, callback){
         let navbar = document.createElement('nav');
         navbar.setAttribute('class', 'navbar navbar-expand-sm bg-dark navbar-dark sticky-top')
         navbar.setAttribute('id', 'navbar')
@@ -25,6 +25,7 @@ var planetsDOM = {
                         +'<a class="nav-link" >Link 1</a>'
                     +'</li>'
                 +'</ul>'
+                +'<button type="button" onclick=sendData.logout(planetsData.activeUser) class="btn btn-secondary navbar-btn ml-auto">Signed in as '+activeUser+' (logout)</button>'
             +'</div>'
         callback();
         //inaczej navbar zostawial kawalek na dole XD
@@ -57,6 +58,7 @@ var planetsDOM = {
             +'<th scope="col">Surface water percentage</th>'
             +'<th scope="col">Population</th>'
             +'<th scope="col">Residents</th>'
+            +'<th scope="col">Vote</th>'
         +' </tr>'
 
 
@@ -84,9 +86,9 @@ var planetsDOM = {
             let planetName = array[i].name;
             let planetNameCell = document.createElement('td');
             planetNameCell.setAttribute('class', 'cell');
-            planetNameCell.setAttribute('id', 'planet-name'+i);
+            planetNameCell.setAttribute('id', planetName);
             document.getElementById('row'+i).appendChild(planetNameCell);
-            document.getElementById('planet-name'+i).innerHTML = planetName;
+            document.getElementById(planetName).innerHTML = planetName;
 
 
             let diameter = array[i].diameter;
@@ -153,6 +155,17 @@ var planetsDOM = {
                     +residents.length + ' resident(s)'
                 +'</button>'
             }
+
+
+            let voteCell = document.createElement('td');
+            voteCell.setAttribute('class', 'vote');
+            voteCell.setAttribute('id', 'vote'+i);
+            document.getElementById('row'+i).appendChild(voteCell);
+            if (planetsData.votedPlanets.indexOf(planetName) > -1){
+                document.getElementById('vote'+i).innerHTML = '<button type="button"  class="btn btn-danger" id="voteButton'+i+'">Voted!</button>';
+            } else {
+                document.getElementById('vote'+i).innerHTML = '<button type="button"  class="btn btn-danger" onclick=planetsEvents.getClickedElement(this) id="voteButton'+i+'">Vote</button>';
+            }
             
 
             let modal = document.createElement('div');
@@ -211,11 +224,21 @@ var planetsDOM = {
             +'<td>'+ resident.gender+'</td>'                                    
     },
 
+    loadPlanetsAll : function(activeUser){
+        this.createNavbar(activeUser, planetsDOM.createPlanetsElements)
+    },
+
     removePlanetsAndModals : function(){
         let tableContainer = document.getElementById('table-container');
         let modalContainer = document.getElementById('modalContainer');
         tableContainer.parentNode.removeChild(tableContainer);
         modalContainer.parentElement.removeChild(modalContainer);
+    },
+
+    removePlanetsDOM : function(){
+        this.removePlanetsAndModals()
+        let navbar = document.getElementById('navbar');
+        navbar.parentNode.removeChild(navbar);
     },
 
     createAwaitingGif : function(){
@@ -229,6 +252,22 @@ var planetsDOM = {
         let awaitingGifContainer = document.getElementById("awaiting-gif-container");
         awaitingGifContainer.parentNode.removeChild(awaitingGifContainer);
     },
+
+    changeVoteAttributes : function(planet){
+        let button = document.getElementById(planet).parentNode.getElementsByClassName('vote')[0].firstChild
+        button.removeAttribute('onclick')
+        button.innerHTML = 'Voted!'
+    }
+}
+
+
+var planetsEvents = {
+    getClickedElement : function(clickedPlanet){
+        let planet = clickedPlanet.parentNode.parentNode.firstChild.innerHTML
+        alert(planet)
+        sendData.sendVote(planetsData.activeUser, planet);
+        
+    }
 }
 
 
@@ -236,5 +275,7 @@ var planetsData = {
     residents : [],
     initialPlanetsEndpoint : 'https://swapi.co/api/planets/',
     nextPlanetsEndpoint : '',
-    previousPlanetsEndpoint: ''
+    previousPlanetsEndpoint: '',
+    activeUser : '',
+    votedPlanets : []
 };

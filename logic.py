@@ -1,5 +1,6 @@
 import server
 import data_manager
+from datetime import datetime
 
 
 def register_new_user(register_input):
@@ -25,3 +26,31 @@ def check_if_user_password_correct(user_input):
         if password == password_from_database[0]['password']:
             return True
     return False
+
+
+def set_active_user(username):
+    data_manager.set_active_user(username)
+
+
+def logout_user():
+    data_manager.logout()
+
+def check_logged_in():
+    logged_in = data_manager.check_logged_in()
+    logged_in = logged_in[0]['active']
+    if logged_in == 'no one':
+        return False
+    return logged_in
+
+
+def vote(vote_input):
+    vote_input['submission_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    data_manager.add_vote(vote_input)    
+
+
+def get_voted_planets(user):
+    voted_planets_dicts = data_manager.get_voted_planets(user)
+    voted_planets = []
+    for item in voted_planets_dicts:
+        voted_planets.append(item['planet_name'])
+    return voted_planets

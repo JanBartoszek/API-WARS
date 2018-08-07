@@ -48,9 +48,9 @@ var loginEvents = {
         registerDOM.createRegisterElements();
     },
 
-    loadPlanetsDOM: function(){
+    loadPlanetsDOM: function(activeUser){
         loginDOM.removeLoginDOM();
-        planetsDOM.createNavbar(planetsDOM.createPlanetsElements);
+        planetsDOM.createNavbar(activeUser, planetsDOM.createPlanetsElements);
         // planetsDOM.createPlanetsElements();
     }
     
