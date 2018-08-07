@@ -99,3 +99,18 @@ def get_voted_planets(cursor, username):
                 )
     voted_planets_dicts = cursor.fetchall()
     return voted_planets_dicts
+
+
+@persistence.connection_handler
+def get_statistics(cursor):
+    cursor.execute(
+        sql.SQL("""
+                    SELECT planet_name, COUNT(planet_name) AS Votes
+                    FROM planet
+                    GROUP BY planet_name
+                    ORDER BY Votes DESC
+                    LIMIT 5
+                """)
+                )
+    statistics = cursor.fetchall()
+    return statistics

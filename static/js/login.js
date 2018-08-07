@@ -1,5 +1,3 @@
-    // based on https://bootsnipp.com/snippets/ypp84
-
 var loginDOM = {
 
     createLoginElements : function(){
@@ -51,11 +49,6 @@ var loginEvents = {
     loadPlanetsDOM: function(activeUser){
         loginDOM.removeLoginDOM();
         planetsDOM.createNavbar(activeUser, planetsDOM.createPlanetsElements);
-        // planetsDOM.createPlanetsElements();
     }
     
-}
-
-var loginLogic = {
-
 }

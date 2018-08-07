@@ -13,18 +13,8 @@ var planetsDOM = {
                 +'<div id="navbar-buttons">'
                     +'<button type="button" onclick=getData.changePlanetsPage(planetsData.previousPlanetsEndpoint) class="btn btn-secondary navbar-btn">Previous</button>'
                     +'<button type="button" onclick=getData.changePlanetsPage(planetsData.nextPlanetsEndpoint) class="btn btn-secondary navbar-btn">Next</button>'
+                    +'<button type="button" onclick=getData.getStatistics() class="btn btn-secondary navbar-btn" id="statisticsButton"  data-toggle="modal" data-target="#statisticsModal">Planet statistics</button>'
                 +'</div>'
-                +'<ul class="nav navbar-nav">'
-                    +'<li class="nav-item">'
-                        +'<a class="nav-link" >Link 1</a>'
-                    +'</li>'
-                    +'<li class="nav-item">'
-                        +'<a class="nav-link" >Link 1</a>'
-                    +'</li>'
-                    +'<li class="nav-item">'
-                        +'<a class="nav-link" >Link 1</a>'
-                    +'</li>'
-                +'</ul>'
                 +'<button type="button" onclick=sendData.logout(planetsData.activeUser) class="btn btn-secondary navbar-btn ml-auto">Signed in as '+activeUser+' (logout)</button>'
             +'</div>'
         callback();
@@ -71,7 +61,37 @@ var planetsDOM = {
         modalContainer.setAttribute('id', 'modalContainer');
         document.body.appendChild(modalContainer);
 
-
+        let statisticsModal = document.createElement('div');
+        statisticsModal.setAttribute('class', 'modal fade');
+        statisticsModal.setAttribute('id', "statisticsModal");
+        document.getElementById('modalContainer').appendChild(statisticsModal);
+        document.getElementById("statisticsModal").innerHTML = 
+        '<div class="modal-dialog modal-xl">'
+                        +'<div class="modal-content">'
+                            +'<div class="modal-header">'
+                                +'<h4 class="modal-title">Top 5 planets</h4>'
+                                +'<button type="button" class="close" data-dismiss="modal">&times;</button>'
+                            +'</div>'                         
+                            +'<div class="modal-body">'
+                                +'<div class="table table-striped col-md-12">'
+                                +'<table>'
+                                    +'<thead class="thead-dark">'
+                                        +'<tr>'
+                                            +'<th scope="col">Planet</th>'
+                                            +'<th scope="col">Votes</th>'
+                                        +' </tr>'
+                                    +'</thead>'
+                                    +'<tbody class="tbody">'
+                                    +'</tbody>'
+                                +'</table>'
+                                +'</div>'
+                            +'</div>'
+                            +'<div class="modal-footer">'
+                                +'<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>'
+                            +'</div>'
+                        +'</div>'
+                    +'</div>'
+                +'</div>'
     },
 
 
@@ -96,7 +116,7 @@ var planetsDOM = {
             diameterCell.setAttribute('class', 'cell');
             diameterCell.setAttribute('id', 'diameter'+i);
             document.getElementById('row'+i).appendChild(diameterCell);
-            document.getElementById('diameter'+i).innerHTML = diameter;
+            document.getElementById('diameter'+i).innerHTML = parseInt(diameter).toLocaleString() + ' km';
 
 
             let climate = array[i].climate;
@@ -124,7 +144,6 @@ var planetsDOM = {
             document.getElementById('surfaceWaterPercentage'+i).innerHTML = surfaceWaterPercentage + '%';
             } else {
                 document.getElementById('surfaceWaterPercentage'+i).innerHTML = surfaceWaterPercentage;
-
             }
 
 
@@ -134,7 +153,7 @@ var planetsDOM = {
             populationCell.setAttribute('id', 'population'+i);
             document.getElementById('row'+i).appendChild(populationCell);
             if (population != 'unknown'){
-                document.getElementById('population'+i).innerHTML = population/1000 + ' thousand people';
+                document.getElementById('population'+i).innerHTML = parseInt(population).toLocaleString() + ' people';
             } else {
             document.getElementById('population'+i).innerHTML = population;
             }
@@ -195,7 +214,6 @@ var planetsDOM = {
                                         +' </tr>'
                                     +'</thead>'
                                     +'<tbody class="tbody">'
-
                                     +'</tbody>'
                                 +'</table>'
                                 +'</div>'
@@ -257,6 +275,26 @@ var planetsDOM = {
         let button = document.getElementById(planet).parentNode.getElementsByClassName('vote')[0].firstChild
         button.removeAttribute('onclick')
         button.innerHTML = 'Voted!'
+    },
+
+    fillUpStatisticsModal : function(data){
+        let statisticsModalBody = document.getElementById("statisticsModal").getElementsByClassName('tbody')[0]
+        data.forEach(function(planet) {
+        let row = document.createElement('tr');
+        row.setAttribute('class', 'row');
+        statisticsModalBody.appendChild(row);
+        statisticsModalBody.lastChild.innerHTML = 
+            '<td>'+ planet.planet_name +'</td>'
+            +'<td>'+ planet.votes +'</td>'
+    });
+    },
+
+    removeStatisticsModalBody : function(){
+        let statisticsModalBody = document.getElementById("statisticsModal").getElementsByClassName('tbody')[0]
+        while (statisticsModalBody.firstChild) {
+            statisticsModalBody.removeChild(statisticsModalBody.firstChild);
+        }
+
     }
 }
 
@@ -264,7 +302,6 @@ var planetsDOM = {
 var planetsEvents = {
     getClickedElement : function(clickedPlanet){
         let planet = clickedPlanet.parentNode.parentNode.firstChild.innerHTML
-        alert(planet)
         sendData.sendVote(planetsData.activeUser, planet);
         
     }

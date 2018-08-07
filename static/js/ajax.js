@@ -59,7 +59,6 @@ var sendData = {
         let convertedActiveUser = logic.convertToJSON(activeUser);
         this.sendToServer(endpoint, convertedActiveUser).then(function(data) {
             planetsData.votedPlanets = data;
-            console.log(data)
         }).catch(function(err) {
             alert('Something went wrong. Please try again.');
         });
@@ -92,7 +91,6 @@ var getData = {
     checkLoggedIn : function(){
         let endpoint = '/check_logged_in'
         this.getData(endpoint).then(function(data) {
-            console.log(planetsData)
             if (data){ 
                 planetsData.activeUser = data;
                 sendData.getVotedPlanets(planetsData.activeUser)
@@ -115,14 +113,11 @@ var getData = {
 
 
     getPlanets: function(endpoint){
-        // let endpoint = 'https://swapi.co/api/planets/';
         planetsDOM.createAwaitingGif();
         let planets = this.getData(endpoint).then(function(data) {
-
+            planetsData.residents = []
             planetsData.nextPlanetsEndpoint = data.next;
             planetsData.previousPlanetsEndpoint = data.previous;
-            // console.log(planetsData)
-            console.log(data);
             planetsDOM.removeAwaitingGif();
             planetsDOM.createDivsWithImages(data.results);
         })
@@ -133,7 +128,6 @@ var getData = {
     getResidents: function(indexNumber){
         let listOfEndpoint = planetsData.residents[indexNumber]
         let tableBody = document.getElementById("myModal"+indexNumber).getElementsByClassName('tbody')[0]
-
         if (tableBody.hasChildNodes() == false){
         listOfEndpoint.forEach(function(endpoint) {
             getData.getData(endpoint).then(function(data) {
@@ -141,6 +135,23 @@ var getData = {
             })        
         })
         };
+    },
+
+    getStatistics : function(){
+        let endpoint = '/statistics'
+        let statisticsModalBody = document.getElementById("statisticsModal").getElementsByClassName('tbody')[0]
+        this.getData(endpoint).then(function(data) {
+            if (data){ 
+                if (statisticsModalBody.hasChildNodes() == false){
+                planetsDOM.fillUpStatisticsModal(data)
+                } else {
+                    planetsDOM.removeStatisticsModalBody()
+                    planetsDOM.fillUpStatisticsModal(data)
+                }
+            } else {     
+                alert('Something went wrong. Please try again.');
+            }
+        })
     },
 
 

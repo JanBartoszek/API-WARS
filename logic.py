@@ -54,3 +54,11 @@ def get_voted_planets(user):
     for item in voted_planets_dicts:
         voted_planets.append(item['planet_name'])
     return voted_planets
+
+
+def get_statistics():
+    statistics = data_manager.get_statistics()
+    # statistics = {}
+    # for item in statistics_dicts:
+        # statistics[item['planet_name']] = item['votes']
+    return statistics

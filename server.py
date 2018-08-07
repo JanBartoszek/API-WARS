@@ -63,6 +63,12 @@ def get_voted_planets():
     return json.dumps(voted_planets)
 
 
+@app.route("/statistics", methods = ['GET', 'POST'])
+def get_statistics():
+    statistics = logic.get_statistics()
+    return json.dumps(statistics)
+
+
 def main():
     app.run(debug=True)
 

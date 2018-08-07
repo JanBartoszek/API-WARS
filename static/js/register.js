@@ -49,7 +49,3 @@ var registerEvents = {
     }
     
 }
-
-var registerLogic = {
-
-}
